@@ -96,7 +96,8 @@ export function PreviewFrame() {
     };
 
     updatePreview();
-  }, [refreshTrigger, getAllFiles, entryPoint, error, isFirstLoad]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshTrigger, getAllFiles, entryPoint]);
 
   if (error) {
     if (error === "firstLoad") {

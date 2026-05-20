@@ -14,6 +14,7 @@ import { CodeEditor } from "@/components/editor/CodeEditor";
 import { PreviewFrame } from "@/components/preview/PreviewFrame";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HeaderActions } from "@/components/HeaderActions";
+import { cn } from "@/lib/utils";
 
 interface MainContentProps {
   user?: {
@@ -76,36 +77,36 @@ export function MainContent({ user, project }: MainContentProps) {
 
                 {/* Content Area */}
                 <div className="flex-1 overflow-hidden bg-neutral-50">
-                  {activeView === "preview" ? (
-                    <div className="h-full bg-white">
-                      <PreviewFrame />
-                    </div>
-                  ) : (
-                    <ResizablePanelGroup
-                      direction="horizontal"
-                      className="h-full"
+                  {/* Preview panel - always mounted to avoid iframe reload on tab switch */}
+                  <div className={cn("h-full bg-white", activeView !== "preview" && "hidden")}>
+                    <PreviewFrame />
+                  </div>
+
+                  {/* Code panel - always mounted to avoid Monaco editor reinit on tab switch */}
+                  <ResizablePanelGroup
+                    direction="horizontal"
+                    className={cn("h-full", activeView !== "code" && "hidden")}
+                  >
+                    {/* File Tree */}
+                    <ResizablePanel
+                      defaultSize={30}
+                      minSize={20}
+                      maxSize={50}
                     >
-                      {/* File Tree */}
-                      <ResizablePanel
-                        defaultSize={30}
-                        minSize={20}
-                        maxSize={50}
-                      >
-                        <div className="h-full bg-neutral-50 border-r border-neutral-200">
-                          <FileTree />
-                        </div>
-                      </ResizablePanel>
+                      <div className="h-full bg-neutral-50 border-r border-neutral-200">
+                        <FileTree />
+                      </div>
+                    </ResizablePanel>
 
-                      <ResizableHandle className="w-[1px] bg-neutral-200 hover:bg-neutral-300 transition-colors" />
+                    <ResizableHandle className="w-[1px] bg-neutral-200 hover:bg-neutral-300 transition-colors" />
 
-                      {/* Code Editor */}
-                      <ResizablePanel defaultSize={70}>
-                        <div className="h-full bg-white">
-                          <CodeEditor />
-                        </div>
-                      </ResizablePanel>
-                    </ResizablePanelGroup>
-                  )}
+                    {/* Code Editor */}
+                    <ResizablePanel defaultSize={70}>
+                      <div className="h-full bg-white">
+                        <CodeEditor />
+                      </div>
+                    </ResizablePanel>
+                  </ResizablePanelGroup>
                 </div>
               </div>
             </ResizablePanel>
