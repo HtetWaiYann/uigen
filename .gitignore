@@ -4,3 +4,4 @@ node_modules/
 .next/
 prisma/dev.db
 src/generated/prisma/
+.playwright-mcp/
